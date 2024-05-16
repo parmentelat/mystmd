@@ -6,6 +6,7 @@ export * from './plugins.js';
 export * from './process/index.js';
 export * from './project/index.js';
 export * from './session/index.js';
+export * from './upgrade/upgrade.js';
 export * from './store/index.js';
 export * from './transforms/index.js';
 export * from './utils/index.js';

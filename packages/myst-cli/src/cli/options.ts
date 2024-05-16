@@ -6,6 +6,7 @@ function parseInt(value: any) {
   return parsedValue;
 }
 
+
 export function makePdfOption(description: string) {
   return new Option('--pdf', description).default(false);
 }

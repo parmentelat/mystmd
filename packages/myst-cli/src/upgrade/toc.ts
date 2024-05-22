@@ -3,7 +3,7 @@ import { resolveExtension } from '../utils/resolveExtension.js';
 import { defined } from './utils.js';
 import { join, relative } from 'node:path';
 import { cwd } from 'node:process';
-
+import type { Entry as MySTEntry } from 'myst-toc';
 const TOCTreeOptions = z
   .object({
     caption: z.string(),
@@ -15,16 +15,19 @@ const TOCTreeOptions = z
   })
   .partial();
 
+type FileEntry = z.infer<typeof FileEntry>;
 const FileEntry = z.object({
   file: z.string(),
   title: z.string().optional(),
 });
 
+type URLEntry = z.infer<typeof URLEntry>;
 const URLEntry = z.object({
   url: z.string(),
   title: z.string().optional(),
 });
 
+type GlobEntry = z.infer<typeof GlobEntry>;
 const GlobEntry = z.object({
   glob: z.string(),
 });
@@ -185,17 +188,10 @@ export function validateSphinxExternalTOC(toc: unknown): SphinxExternalTOC | und
   }
 }
 
-function convertGeneric(dir: string, data: Record<string, unknown>): any {
-  // TODO: handle numbering
-  if ('parts' in data || 'subtrees' in data) {
-    const parts = (data.parts ?? data.subtrees) as Record<string, unknown>[];
-    return parts.map((part, index) => {
-      return { title: part.caption ?? `Part ${index}`, children: convertGeneric(dir, part) };
-    });
-  } else if ('chapters' in data || 'sections' in data) {
-    const chapters = (data.chapters ?? data.sections) as Record<string, unknown>[];
-    return chapters.map((chapter) => convertGeneric(dir, chapter));
-  } else if ('file' in data) {
+type PrimitiveEntry = FileEntry | URLEntry | GlobEntry;
+
+function convertPrimitive(dir: string, data: PrimitiveEntry): MySTEntry {
+  if ('file' in data) {
     const resolved = resolveExtension(join(dir, data.file as string));
     // TODO: check this is valid!
     return {
@@ -212,7 +208,25 @@ function convertGeneric(dir: string, data: Record<string, unknown>): any {
       pattern: data.glob,
     };
   } else {
-    throw new Error("This should not happen!");
+    throw new Error('This should not happen!');
+  }
+}
+
+function convertGeneric(dir: string, data: Record<string, unknown>): any {
+  // The JB schema is quite complex, so rather than being type-safe here
+  // we'll drop type-information in order to write something readable
+
+  // TODO: handle numbering
+  if ('parts' in data || 'subtrees' in data) {
+    const parts = (data.parts ?? data.subtrees) as Record<string, unknown>[];
+    return parts.map((part, index) => {
+      return { title: part.caption ?? `Part ${index}`, children: convertGeneric(dir, part) };
+    });
+  } else if ('chapters' in data || 'sections' in data) {
+    const chapters = (data.chapters ?? data.sections) as Record<string, unknown>[];
+    return chapters.map((chapter) => convertGeneric(dir, chapter));
+  } else {
+    return convertPrimitive(dir, data as any);
   }
 }
 export function upgradeTOC(data: SphinxExternalTOC) {

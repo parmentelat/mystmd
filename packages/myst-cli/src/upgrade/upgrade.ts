@@ -7,7 +7,7 @@ import type { Config } from 'myst-config';
 import { upgradeConfig, validateJupyterBookConfig } from './config.js';
 import { upgradeTOC, validateSphinxExternalTOC } from './toc.js';
 import { defined } from './utils.js';
-export async function upgrade(session: ISession, files: string[], opts: any) {
+export async function upgrade(session: ISession, opts: any) {
   // TODO: generalize and pull this out!
   const upgradeLog: Record<string, any> = {
     input: {
@@ -37,7 +37,7 @@ export async function upgrade(session: ISession, files: string[], opts: any) {
     }
   }
 
-  fs.writeFileSync('myst.yml', JSON.stringify(config, null, 2));
+  fs.writeFileSync('myst.yml', yaml.dump(config));
 
   writeJsonLogs(session, 'myst.upgrade.json', upgradeLog);
   session.dispose();

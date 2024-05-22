@@ -103,7 +103,7 @@ export function validateJupyterBookConfig(config: unknown): JupyterBookConfig | 
 }
 
 function parseGitHubRepoURL(url: string): string | undefined {
-  const match = url.match(/(?:git@|https:\/\/)github.com[:\/](.*).git/);
+  const match = url.match(/(?:git@|https:\/\/)github.com[:\/](.*)(?:.git)?/);
   if (!match) {
     return undefined;
   }

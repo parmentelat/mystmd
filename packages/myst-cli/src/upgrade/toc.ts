@@ -1,6 +1,9 @@
 import { z } from 'zod';
-
+import { resolveExtension } from '../utils/resolveExtension.js';
 import { defined } from './utils.js';
+import { join, relative } from 'node:path';
+import { cwd } from 'node:process';
+
 const TOCTreeOptions = z
   .object({
     caption: z.string(),
@@ -165,7 +168,7 @@ const BookTOCBase = z.object({
 const BookTOC = z.union([
   BookTOCBase.and(BookShorthandOuterSubtree),
   BookTOCBase.merge(BookHasOuterSubtrees).strict(),
-  ArticleTOCBase.strict(),
+  BookTOCBase.strict(),
 ]);
 
 /** TOC **/
@@ -182,4 +185,36 @@ export function validateSphinxExternalTOC(toc: unknown): SphinxExternalTOC | und
   }
 }
 
-export function upgradeTOC(data: SphinxExternalTOC) {}
+function convertGeneric(dir: string, data: Record<string, unknown>): any {
+  // TODO: handle numbering
+  if ('parts' in data || 'subtrees' in data) {
+    const parts = (data.parts ?? data.subtrees) as Record<string, unknown>[];
+    return parts.map((part, index) => {
+      return { title: part.caption ?? `Part ${index}`, children: convertGeneric(dir, part) };
+    });
+  } else if ('chapters' in data || 'sections' in data) {
+    const chapters = (data.chapters ?? data.sections) as Record<string, unknown>[];
+    return chapters.map((chapter) => convertGeneric(dir, chapter));
+  } else if ('file' in data) {
+    const resolved = resolveExtension(join(dir, data.file as string));
+    // TODO: check this is valid!
+    return {
+      file: relative(dir, resolved as string),
+      title: data.title,
+    };
+  } else if ('url' in data) {
+    return {
+      url: data.url,
+      title: data.title,
+    };
+  } else if ('glob' in data) {
+    return {
+      pattern: data.glob,
+    };
+  } else {
+    throw new Error("This should not happen!");
+  }
+}
+export function upgradeTOC(data: SphinxExternalTOC) {
+  return convertGeneric(cwd(), data) as any[];
+}

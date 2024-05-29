@@ -6,9 +6,9 @@ import yaml from 'js-yaml';
 import type { Config } from 'myst-config';
 import { upgradeConfig, validateJupyterBookConfig } from './config.js';
 import { upgradeTOC, validateSphinxExternalTOC } from './toc.js';
+import { upgradeGlossaries } from './syntax.js';
 import { defined } from './utils.js';
 export async function upgrade(session: ISession, opts: any) {
-  // TODO: generalize and pull this out!
   const upgradeLog: Record<string, any> = {
     input: {
       opts: opts,
@@ -37,6 +37,9 @@ export async function upgrade(session: ISession, opts: any) {
     }
   }
 
+  upgradeGlossaries();
+
+  // Write new myst.yml
   fs.writeFileSync('myst.yml', yaml.dump(config));
 
   writeJsonLogs(session, 'myst.upgrade.json', upgradeLog);

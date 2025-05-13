@@ -1,5 +1,11 @@
 # myst-to-typst
 
+## 0.0.31
+
+### Patch Changes
+
+- 68c93b9a: Escape semicolons
+
 ## 0.0.30
 
 ### Patch Changes

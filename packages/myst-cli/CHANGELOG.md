@@ -1,5 +1,11 @@
 # myst-cli
 
+## 1.5.0
+
+### Minor Changes
+
+- d70e85b: hidden nodes get excluded from manifest and enumeration
+
 ## 1.4.0
 
 ### Minor Changes

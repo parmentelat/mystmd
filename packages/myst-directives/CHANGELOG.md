@@ -1,5 +1,14 @@
 # myst-directives
 
+## 1.6.2
+
+### Patch Changes
+
+- f1ccba4: Add docstring to `myst` plugin
+- Updated dependencies [a742dda]
+  - myst-common@1.9.1
+  - myst-spec-ext@1.9.1
+
 ## 1.6.1
 
 ### Patch Changes

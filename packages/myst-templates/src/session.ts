@@ -4,8 +4,10 @@ import type { ISession } from './types.js';
 import { default as nodeFetch } from 'node-fetch';
 import type { RequestInfo, RequestInit, Response } from 'node-fetch';
 
+const DEFAULT_API_URL = 'https://api.mystmd.org';
+
 export class Session implements ISession {
-  API_URL = 'https://api.mystmd.org';
+  API_URL = process.env.API_URL ?? DEFAULT_API_URL;
   log: Logger;
   constructor(opts?: { logger?: Logger }) {
     this.log = opts?.logger ?? chalkLogger(LogLevel.debug);

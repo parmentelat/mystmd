@@ -1,5 +1,13 @@
 # myst-cli
 
+## 1.10.2
+
+### Patch Changes
+
+- Updated dependencies [3252535]
+  - myst-transforms@1.3.51
+  - myst-migrate@1.10.2
+
 ## 1.10.1
 
 ### Patch Changes

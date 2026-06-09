@@ -1,5 +1,11 @@
 # mystmd
 
+## 1.10.2
+
+### Patch Changes
+
+- 3252535: Allow `grid` directives to be used in `figure` directives
+
 ## 1.10.1
 
 ## 1.10.0

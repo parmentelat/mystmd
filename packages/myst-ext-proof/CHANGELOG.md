@@ -1,5 +1,16 @@
 # myst-ext-proof
 
+## 1.0.13
+
+### Patch Changes
+
+- 403caed: Add proof:_ as alias for prf:_
+- Updated dependencies [7fda16f]
+- Updated dependencies [029025f]
+- Updated dependencies [a540867]
+  - myst-common@1.10.1
+  - myst-spec@0.0.6
+
 ## 1.0.12
 
 ### Patch Changes

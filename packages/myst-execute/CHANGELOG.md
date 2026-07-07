@@ -1,5 +1,22 @@
 # myst-execute
 
+## 0.5.0
+
+### Minor Changes
+
+- 7fda16f: Switch to ipynb build cache
+
+### Patch Changes
+
+- 71aec67: Fix type export
+- 12f4721: Fix dependencies / types
+- bde9e9c: Bump @jupyterlite/services and fix types
+- Updated dependencies [7fda16f]
+- Updated dependencies [029025f]
+- Updated dependencies [a540867]
+  - myst-common@1.10.1
+  - myst-spec@0.0.6
+
 ## 0.4.0
 
 ### Minor Changes

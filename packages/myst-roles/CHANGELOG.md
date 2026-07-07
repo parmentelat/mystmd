@@ -1,5 +1,14 @@
 # myst-roles
 
+## 1.7.4
+
+### Patch Changes
+
+- 403caed: Add proof:_ as alias for prf:_
+- Updated dependencies [7fda16f]
+  - myst-common@1.10.1
+  - myst-spec-ext@1.10.1
+
 ## 1.7.3
 
 ### Patch Changes
